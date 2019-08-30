@@ -60,7 +60,14 @@ class Console extends Command
         $options['debug'] = true;
         $options['silent'] = true;
         $options['interactive'] = false;
-        $options['colors'] = true;
+        // NetSRM change START
+        // $options['colors'] = true;
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $options['colors'] = false;
+        } else {
+            $options['colors'] = true;
+        }
+        // NetSRM change END
 
         Debug::setOutput(new Output($options));
 

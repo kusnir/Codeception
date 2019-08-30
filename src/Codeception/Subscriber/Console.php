@@ -273,7 +273,10 @@ class Console implements EventSubscriberInterface
     {
         if ($this->isDetailed($e->getTest())) {
             $msg = $e->getFail()->getMessage();
-            $this->message('SKIPPED')->append($msg ? ": $msg" : '')->center(' ')->style('pending')->writeln();
+            // NetSRM change START
+            //$this->message('SKIPPED')->append($msg ? ": $msg" : '')->center(' ')->style('pending')->writeln();
+            $this->message('SKIPPED')->append($msg ? ": $msg" : '')->center(' ')->style('pending')->append("\n")->writeln();
+            // NetSRM change END
 
             return;
         }
@@ -284,7 +287,10 @@ class Console implements EventSubscriberInterface
     {
         if ($this->isDetailed($e->getTest())) {
             $msg = $e->getFail()->getMessage();
-            $this->message('INCOMPLETE')->append($msg ? ": $msg" : '')->center(' ')->style('pending')->writeln();
+            // NetSRM change START
+            //$this->message('INCOMPLETE')->append($msg ? ": $msg" : '')->center(' ')->style('pending')->writeln();
+            $this->message('INCOMPLETE')->append($msg ? ": $msg" : '')->center(' ')->style('pending')->append("\n")->writeln();
+            // NetSRM change END
 
             return;
         }
@@ -569,6 +575,9 @@ class Console implements EventSubscriberInterface
                 }
             }
         }
+        // NetSRM change START
+        $this->width = 320;
+        // NetSRM change END
         return $this->width;
     }
 

@@ -513,11 +513,25 @@ class WebDriver extends CodeceptionModule implements
         $this->debugWebDriverLogs($test);
         $filename = preg_replace('~\W~', '.', Descriptor::getTestSignatureUnique($test));
         $outputDir = codecept_output_dir();
-        $this->_saveScreenshot($report = $outputDir . mb_strcut($filename, 0, 245, 'utf-8') . '.fail.png');
+        // NetSRM change START
+        $filenamePng = mb_strcut($filename, 0, 245, 'utf-8') . '.fail.png';
+        $filenameHtml = mb_strcut($filename, 0, 244, 'utf-8') . '.fail.html';
+        for ($i = 1; $i < 1000; $i++) {
+            if ((! file_exists($outputDir . $filenamePng)) && (! file_exists($outputDir . $filenameHtml))) {
+                break;
+            }
+            $filenamePng = mb_strcut($filename . '.' . $i, 0, 245, 'utf-8') . '.fail.png';
+            $filenameHtml = mb_strcut($filename . '.' . $i, 0, 244, 'utf-8') . '.fail.html';
+        }
+        //$this->_saveScreenshot($report = $outputDir . mb_strcut($filename, 0, 245, 'utf-8') . '.fail.png');
+        $this->_saveScreenshot($report = $outputDir . $filenamePng);
         $test->getMetadata()->addReport('png', $report);
-        $this->_savePageSource($report = $outputDir . mb_strcut($filename, 0, 244, 'utf-8') . '.fail.html');
+        //$this->_savePageSource($report = $outputDir . mb_strcut($filename, 0, 244, 'utf-8') . '.fail.html');
+        $this->_savePageSource($report = $outputDir . $filenameHtml);
         $test->getMetadata()->addReport('html', $report);
         $this->debug("Screenshot and page source were saved into '$outputDir' dir");
+        $this->debug("[$filenamePng, $filenameHtml]");
+        // NetSRM change END
     }
 
     /**
